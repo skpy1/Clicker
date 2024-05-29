@@ -867,6 +867,12 @@ MonoBehaviour:
   isFourthAch: 0
   fifthAch: {fileID: 201987042}
   isFfifthAch: 0
+  spriteImage: {fileID: 21300000, guid: 718b69dffad671b4aab0f334e0f61f37, type: 3}
+  imgObj: {fileID: 1419720386}
+  imgObj2: {fileID: 995870318}
+  imgObj3: {fileID: 313551621}
+  imgObj4: {fileID: 307828694}
+  imgObj5: {fileID: 720830553}
 --- !u!1 &540798754
 GameObject:
   m_ObjectHideFlags: 0

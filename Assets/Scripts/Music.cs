@@ -5,6 +5,7 @@ using UnityEngine;
 public class Music : MonoBehaviour
 {
     private static Music instance;
+    [SerializeField] public AudioSource audioSource;
     private void Awake()
     {
         if (instance != null)
@@ -15,6 +16,30 @@ public class Music : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(transform.gameObject);
+        }
+    }
+    public void Sound()
+    {
+        if (PlayerPrefs.GetInt("Sounds") == 0)
+        {
+            PlayerPrefs.SetInt("Sounds", 1);
+            Debug.Log(PlayerPrefs.GetInt("Sounds"));
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Sounds", 0);
+            Debug.Log(PlayerPrefs.GetInt("Sounds"));
+        }
+    }
+    void Update()
+    {
+        if (PlayerPrefs.GetInt("Sounds") == 0)
+        {
+            audioSource.enabled = true;
+        }
+        else
+        {
+            audioSource.enabled = false;
         }
     }
 }

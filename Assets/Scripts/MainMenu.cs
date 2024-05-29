@@ -16,7 +16,8 @@ public class MainMenu : MonoBehaviour
     public Text CoinPerSec;
     public GameObject effect;
     public GameObject button;
-    public AudioSource audioSource;
+    [SerializeField] public AudioSource audioSource;
+
 
     private void Start()
     {
@@ -39,7 +40,10 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetInt("money", money);
         Instantiate(effect, button.GetComponent<RectTransform>().position.normalized, Quaternion.identity);
         button.GetComponent<RectTransform>().localScale = new Vector3(0.95f, 0.95f, 0f);
-        audioSource.Play();
+        if(PlayerPrefs.GetInt("Sounds") == 0)
+        {
+            audioSource.Play();
+        }
     }
 
     public void OnClickUp()
@@ -91,8 +95,28 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
+    public void Sound()
+    {
+        if (PlayerPrefs.GetInt("Sounds") == 0)
+        {
+            PlayerPrefs.SetInt("Sounds", 1);
+        }
+        else 
+        {
+            PlayerPrefs.SetInt("Sounds", 0);
+        }
+    }
+
     void Update()
     {
+        if(PlayerPrefs.GetInt("Sounds") == 0)
+        {
+            audioSource.enabled = true;
+        }
+        else
+        {
+            audioSource.enabled = false;
+        }
         CoinPerClick.text = PlayerPrefs.GetInt("CoinPerClickValue").ToString();
         CoinPerSec.text = PlayerPrefs.GetInt("CoinPerSecValue").ToString();
         moneyText.text = money.ToString();
