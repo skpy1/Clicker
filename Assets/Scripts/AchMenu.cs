@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class AchMenu : MonoBehaviour
 {
     public int money;
-    public int totalMoney;
     [SerializeField] Button firstAch;
     [SerializeField] bool isFirstAch;
 
@@ -17,14 +16,21 @@ public class AchMenu : MonoBehaviour
     [SerializeField] Button thirdAch;
     [SerializeField] bool isThirdAch;
 
+    [SerializeField] Button fourthAch;
+    [SerializeField] bool isFourthAch;
+
+    [SerializeField] Button fifthAch;
+    [SerializeField] bool isFfifthAch;
+
     void Start()
     {
         money = PlayerPrefs.GetInt("money");
-        totalMoney = PlayerPrefs.GetInt("totalMoney");
         isFirstAch = PlayerPrefs.GetInt("isFirstAch") == 1 ? true : false;
         isSecondAch = PlayerPrefs.GetInt("isSecondAch") == 1 ? true : false;
         isThirdAch = PlayerPrefs.GetInt("isThirdAch") == 1 ? true : false;
-        if (totalMoney >= 100 && !isFirstAch)
+        isFourthAch = PlayerPrefs.GetInt("isFourthAch") == 1 ? true : false;
+        isFfifthAch = PlayerPrefs.GetInt("isFfifthAch") == 1 ? true : false;
+        if (money >= 100 && !isFirstAch && PlayerPrefs.GetInt("isFirstAchPressed") == 0)
         {
             firstAch.interactable = true;
         }
@@ -33,21 +39,41 @@ public class AchMenu : MonoBehaviour
             firstAch.interactable = false;
             StartCoroutine(IdleFarm());
         }
-        if (totalMoney >= 1000 && !isSecondAch)
+        if (money >= 1000 && !isSecondAch && PlayerPrefs.GetInt("isSecondAchPressed") == 0)
         {
             secondAch.interactable = true;
         }
         else
         {
             secondAch.interactable = false;
+            StartCoroutine(IdleFarm());
         }
-        if (totalMoney >= 10000 && !isThirdAch)
+        if (money >= 10000 && !isThirdAch && PlayerPrefs.GetInt("isThirdAchPressed") == 0)
         {
             thirdAch.interactable = true;
         }
         else
         {
             thirdAch.interactable = false;
+            StartCoroutine(IdleFarm());
+        }
+        if (money >= 100000 && !isFourthAch && PlayerPrefs.GetInt("isFourthAchPressed") == 0)
+        {
+            thirdAch.interactable = true;
+        }
+        else
+        {
+            thirdAch.interactable = false;
+            StartCoroutine(IdleFarm());
+        }
+        if (money >= 1000000 && !isFourthAch && PlayerPrefs.GetInt("isFfifthAchPressed") == 0)
+        {
+            thirdAch.interactable = true;
+        }
+        else
+        {
+            thirdAch.interactable = false;
+            StartCoroutine(IdleFarm());
         }
     }
 
@@ -55,66 +81,49 @@ public class AchMenu : MonoBehaviour
     {
         int money = PlayerPrefs.GetInt("money");
         money += n;
-        Debug.Log(money);
         PlayerPrefs.SetInt("money", money);
-        Debug.Log(PlayerPrefs.GetInt("money"));
-        int totalMoney = PlayerPrefs.GetInt("totalMoney");
-        totalMoney += n;
-        PlayerPrefs.SetInt("totalMoney", totalMoney);
         if (n == 100){
             isFirstAch = true;
             PlayerPrefs.SetInt("isFirstAch", 1);
+            PlayerPrefs.SetInt("CoinPerSecValue", PlayerPrefs.GetInt("CoinPerSecValue") + 1);
             firstAch.interactable = false;
-            PlayerPrefs.Save();
+            PlayerPrefs.SetInt("isFirstAchPressed", 1);
         }
-        else if (n == 1000)
+        if (n == 1000)
         {
             isSecondAch = true;
-            PlayerPrefs.SetInt("isSecondAch", 1);
+            PlayerPrefs.SetInt("CoinPerSecValue", PlayerPrefs.GetInt("CoinPerSecValue") + 10);
             secondAch.interactable = false;
-            PlayerPrefs.Save();
+            PlayerPrefs.SetInt("isSecondAchPressed", 1);
         }
-        else if (n == 10000)
+        if (n == 10000)
         {
             isThirdAch = true;
-            PlayerPrefs.SetInt("isThirdAch", 1);
+            PlayerPrefs.SetInt("CoinPerSecValue", PlayerPrefs.GetInt("CoinPerSecValue") + 100);
             thirdAch.interactable = false;
-            PlayerPrefs.Save();
+            PlayerPrefs.SetInt("isThirdAchPressed", 1);
+        }
+        if (n == 100000)
+        {
+            isThirdAch = true;
+            PlayerPrefs.SetInt("CoinPerSecValue", PlayerPrefs.GetInt("CoinPerSecValue") + 1000);
+            thirdAch.interactable = false;
+            PlayerPrefs.SetInt("isFourthAchPressed", 1);
+        }
+        if (n == 1000000)
+        {
+            isThirdAch = true;
+            PlayerPrefs.SetInt("CoinPerSecValue", PlayerPrefs.GetInt("CoinPerSecValue") + 10000);
+            thirdAch.interactable = false;
+            PlayerPrefs.SetInt("isFfifthAchPressed", 1);
         }
         PlayerPrefs.Save();
-    }
-
-    public void GetSecond()
-    {
-        int money = PlayerPrefs.GetInt("money");
-        money += 1000;
-        PlayerPrefs.SetInt("money", money);
-        int totalMoney = PlayerPrefs.GetInt("totalMoney");
-        totalMoney += 1000;
-        PlayerPrefs.SetInt("totalMoney", totalMoney);
-        isSecondAch = true;
-        PlayerPrefs.SetInt("isSecondAch", 1);
-        secondAch.interactable = false;
-        PlayerPrefs.Save();
-    }
-
-    public void GetThird()
-    {
-        int money = PlayerPrefs.GetInt("money");
-        money += 10000;
-        PlayerPrefs.SetInt("money", money);
-        int totalMoney = PlayerPrefs.GetInt("totalMoney");
-        totalMoney += 10000;
-        PlayerPrefs.SetInt("totalMoney", totalMoney);
-        isThirdAch = true;
-        PlayerPrefs.SetInt("isThirdAch", 1);
-        thirdAch.interactable = false;
     }
 
     IEnumerator IdleFarm()
     {
         yield return new WaitForSeconds(1);
-        money++;
+        money += PlayerPrefs.GetInt("CoinPerSecValue");
         PlayerPrefs.SetInt("money", money);
         StartCoroutine(IdleFarm());
     }
@@ -123,5 +132,4 @@ public class AchMenu : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-
 }

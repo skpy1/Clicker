@@ -11,19 +11,22 @@ using Unity.VisualScripting;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] int money;
-    public int totalMoney;
     public Text moneyText;
+    public Text CoinPerClick;
+    public Text CoinPerSec;
     public GameObject effect;
     public GameObject button;
     public AudioSource audioSource;
 
     private void Start()
     {
+        if (PlayerPrefs.GetInt("CoinPerClickValue") == 0)
+        {
+            PlayerPrefs.SetInt("CoinPerClickValue", 1);
+        }
         //PlayerPrefs.DeleteAll();
         audioSource = GetComponent<AudioSource>();
         money = PlayerPrefs.GetInt("money");
-        totalMoney = PlayerPrefs.GetInt("totalMoney");
-        Debug.Log(money);
 
         bool isFirst = PlayerPrefs.GetInt("isFirst") == 1 ? true : false;
         StartCoroutine(IdleFarm());
@@ -32,10 +35,8 @@ public class MainMenu : MonoBehaviour
 
     public void ButtonClick()
     {
-        money += 10;
-        totalMoney += 10;
+        money += PlayerPrefs.GetInt("CoinPerClickValue");
         PlayerPrefs.SetInt("money", money);
-        PlayerPrefs.SetInt("totalMoney", totalMoney);
         Instantiate(effect, button.GetComponent<RectTransform>().position.normalized, Quaternion.identity);
         button.GetComponent<RectTransform>().localScale = new Vector3(0.95f, 0.95f, 0f);
         audioSource.Play();
@@ -49,7 +50,7 @@ public class MainMenu : MonoBehaviour
     IEnumerator IdleFarm()
     {
         yield return new WaitForSeconds(1);
-        money++;
+        money += PlayerPrefs.GetInt("CoinPerSecValue");
         PlayerPrefs.SetInt("money", money);
         StartCoroutine(IdleFarm());
     }
@@ -85,8 +86,15 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void ToShop()
+    {
+        SceneManager.LoadScene(2);
+    }
+
     void Update()
     {
+        CoinPerClick.text = PlayerPrefs.GetInt("CoinPerClickValue").ToString();
+        CoinPerSec.text = PlayerPrefs.GetInt("CoinPerSecValue").ToString();
         moneyText.text = money.ToString();
     }
 }
