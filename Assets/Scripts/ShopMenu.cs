@@ -28,11 +28,13 @@ public class ShopMenu : MonoBehaviour
         }
 
         PlayerPrefs.SetInt("CoinPerClickValue", PlayerPrefs.GetInt("CoinPerClickValue") + 1);
+        SceneManager.LoadScene(4);
     }
 
     public void byCoinPerSec()
     {
         PlayerPrefs.SetInt("CoinPerSecValue", PlayerPrefs.GetInt("CoinPerSecValue") + 1);
+        SceneManager.LoadScene(4);
     }
 
     IEnumerator IdleFarm()

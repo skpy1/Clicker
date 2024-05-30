@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Music : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class Music : MonoBehaviour
     }
     void Update()
     {
+        if(SceneManager.GetActiveScene().name == "AdScene")
+        {
+            audioSource.enabled = false;
+        }
         if (PlayerPrefs.GetInt("Sounds") == 0)
         {
             audioSource.enabled = true;
